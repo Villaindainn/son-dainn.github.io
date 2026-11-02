@@ -418,7 +418,7 @@
 
   <!-- VIDEO NỀN -->
   <video id="bg-video" autoplay muted loop playsinline>
-    <source src="background.mp4" type="video/mp4">
+    <source src="background-dark.mp4" type="video/mp4">
   </video>
 
   <!-- LỚP PHỦ VIDEO -->
@@ -559,8 +559,8 @@
       // Sáng dùng background.mp4
       // Tối dùng background-dark.mp4
       const videoPath = isDark
-        ? "background-dark.mp4"
-        : "background.mp4";
+        ? "background.mp4"
+        : "background-dark.mp4";
 
       if (videoSource.getAttribute("src") !== videoPath) {
         videoSource.setAttribute("src", videoPath);
