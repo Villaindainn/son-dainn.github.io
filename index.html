@@ -58,7 +58,7 @@
     }
 
     /* =========================
-       NÚT ĐỔI GIAO DIỆN
+       NÚT ĐỔI SÁNG / TỐI
     ========================= */
 
     .theme-toggle {
@@ -141,9 +141,7 @@
 
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 
-      transition:
-        transform 0.3s ease,
-        border-color 0.3s ease;
+      transition: transform 0.3s ease, border-color 0.3s ease;
     }
 
     .avatar:hover {
@@ -291,6 +289,10 @@
       border-bottom: 1px solid var(--panel-border);
     }
 
+    /* =========================
+       TỪNG BÀI NHẠC
+    ========================= */
+
     .song {
       display: flex;
       align-items: center;
@@ -309,20 +311,75 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
-    .song-cover {
-      width: 44px;
-      height: 44px;
+    /* Ảnh bìa bài nhạc */
+    .song-cover-button {
+      position: relative;
+      width: 58px;
+      height: 58px;
       flex-shrink: 0;
+
+      padding: 0;
+      border: none;
+      border-radius: 10px;
+      overflow: hidden;
+
+      background: #222;
+      cursor: pointer;
+    }
+
+    .song-cover {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+
+      transition: transform 0.3s ease;
+    }
+
+    /* Lớp phủ khi rê chuột */
+    .song-cover-overlay {
+      position: absolute;
+      inset: 0;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.2);
-      font-size: 20px;
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
 
+    .song-cover-button:hover .song-cover {
+      transform: scale(1.1);
+    }
+
+    .song-cover-button:hover .song-cover-overlay {
+      opacity: 1;
+    }
+
+    /* Trên điện thoại: luôn hiển thị biểu tượng phát */
+    @media (hover: none) {
+      .song-cover-overlay {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.25);
+      }
+    }
+
+    .play-icon {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .song-cover-button.is-playing .song-cover-overlay {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    /* Thông tin bài nhạc */
     .song-info {
       flex: 1;
       min-width: 0;
@@ -342,7 +399,12 @@
     .song-status {
       font-size: 12px;
       opacity: 0.7;
+      white-space: nowrap;
     }
+
+    /* =========================
+       FOOTER
+    ========================= */
 
     .footer {
       margin-top: 25px;
@@ -381,10 +443,6 @@
 
     body.dark-mode .avatar {
       border-color: rgba(255, 255, 255, 0.35);
-    }
-
-    body.dark-mode .song-cover {
-      background: #252525;
     }
 
     /* =========================
@@ -455,6 +513,16 @@
 
       .song {
         padding: 13px 14px;
+        gap: 12px;
+      }
+
+      .song-cover-button {
+        width: 52px;
+        height: 52px;
+      }
+
+      .song-status {
+        font-size: 11px;
       }
     }
 
@@ -511,7 +579,7 @@
         <span class="zodiac" title="Nhân Mã">♐</span>
       </div>
 
-      <!-- ICON INSTAGRAM, FACEBOOK VÀ MUSIC -->
+      <!-- ICON INSTAGRAM, FACEBOOK, TIKTOK VÀ MUSIC -->
       <div class="social-links">
 
         <!-- Instagram -->
@@ -541,19 +609,21 @@
             <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.5 1.6-1.5h1.7V3.7c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5v1.8H7V13h2.8v8h3.7z"/>
           </svg>
         </a>
-<!-- TikTok -->
-<a
-  class="social-button"
-  href="https://www.tiktok.com/@dainnvillain"
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label="TikTok"
-  title="TikTok"
->
-  <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M19.6 7.1a6.6 6.6 0 0 1-4.1-1.4v8.1a5.7 5.7 0 1 1-5.7-5.7c.4 0 .8 0 1.2.1v3.1a2.7 2.7 0 1 0-1.2 5.1c1.5 0 2.7-1.2 2.7-2.7V2h3.1c.2 2.1 1.9 3.8 4 4v1.1z"/>
-  </svg>
-</a>
+
+        <!-- TikTok -->
+        <a
+          class="social-button"
+          href="https://www.tiktok.com/@dainnvillain"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="TikTok"
+          title="TikTok"
+        >
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19.6 7.1a6.6 6.6 0 0 1-4.1-1.4v8.1a5.7 5.7 0 1 1-5.7-5.7c.4 0 .8 0 1.2.1v3.1a2.7 2.7 0 1 0-1.2 5.1c1.5 0 2.7-1.2 2.7-2.7V2h3.1c.2 2.1 1.9 3.8 4 4v1.1z"/>
+          </svg>
+        </a>
+
         <!-- FAVORITE MUSIC -->
         <button
           id="music-toggle"
@@ -570,36 +640,84 @@
 
       </div>
 
-      <!-- DANH SÁCH NHẠC MẪU -->
+      <!-- DANH SÁCH NHẠC -->
       <div id="music-panel" class="music-panel">
 
         <div class="music-heading">My Playlist</div>
 
+        <!-- BÀI 1 -->
         <div class="song">
-          <div class="song-cover">♫</div>
+          <button
+            class="song-cover-button"
+            data-song="0"
+            aria-label="Phát hoặc tạm dừng bài 1"
+            title="Phát / Tạm dừng"
+          >
+            <img src="music1.jpg" alt="Ảnh bìa bài 1" class="song-cover">
+
+            <span class="song-cover-overlay">
+              <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="play-shape" d="M8 5v14l11-7z"/>
+              </svg>
+            </span>
+          </button>
+
           <div class="song-info">
             <div class="song-title">Song Title One</div>
             <div class="song-artist">Artist Name</div>
           </div>
-          <div class="song-status">Coming soon</div>
+
+          <div class="song-status" data-status="0">Chưa phát</div>
         </div>
 
+        <!-- BÀI 2 -->
         <div class="song">
-          <div class="song-cover">♪</div>
+          <button
+            class="song-cover-button"
+            data-song="1"
+            aria-label="Phát hoặc tạm dừng bài 2"
+            title="Phát / Tạm dừng"
+          >
+            <img src="music2.jpg" alt="Ảnh bìa bài 2" class="song-cover">
+
+            <span class="song-cover-overlay">
+              <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="play-shape" d="M8 5v14l11-7z"/>
+              </svg>
+            </span>
+          </button>
+
           <div class="song-info">
             <div class="song-title">Song Title Two</div>
             <div class="song-artist">Artist Name</div>
           </div>
-          <div class="song-status">Coming soon</div>
+
+          <div class="song-status" data-status="1">Chưa phát</div>
         </div>
 
+        <!-- BÀI 3 -->
         <div class="song">
-          <div class="song-cover">♫</div>
+          <button
+            class="song-cover-button"
+            data-song="2"
+            aria-label="Phát hoặc tạm dừng bài 3"
+            title="Phát / Tạm dừng"
+          >
+            <img src="music3.jpg" alt="Ảnh bìa bài 3" class="song-cover">
+
+            <span class="song-cover-overlay">
+              <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="play-shape" d="M8 5v14l11-7z"/>
+              </svg>
+            </span>
+          </button>
+
           <div class="song-info">
             <div class="song-title">Song Title Three</div>
             <div class="song-artist">Artist Name</div>
           </div>
-          <div class="song-status">Coming soon</div>
+
+          <div class="song-status" data-status="2">Chưa phát</div>
         </div>
 
       </div>
@@ -623,8 +741,6 @@
     function setTheme(isDark) {
       document.body.classList.toggle("dark-mode", isDark);
 
-      // Sáng: mặt trời
-      // Tối: mặt trăng
       themeToggle.textContent = isDark ? "🌙" : "☀️";
 
       themeToggle.setAttribute(
@@ -634,8 +750,6 @@
           : "Chuyển sang giao diện tối"
       );
 
-      // Sáng: background.mp4
-      // Tối: background-dark.mp4
       const videoPath = isDark
         ? "background-dark.mp4"
         : "background.mp4";
@@ -652,13 +766,11 @@
       localStorage.setItem("theme", isDark ? "dark" : "light");
     }
 
-    // Bấm nút để đổi giao diện
     themeToggle.addEventListener("click", () => {
       const isDark = !document.body.classList.contains("dark-mode");
       setTheme(isDark);
     });
 
-    // Mặc định sáng nếu chưa từng chọn giao diện
     const savedTheme = localStorage.getItem("theme");
     setTheme(savedTheme === "dark");
 
@@ -674,6 +786,105 @@
       const isOpen = musicPanel.classList.toggle("show");
 
       musicToggle.setAttribute("aria-expanded", isOpen);
+    });
+
+
+    // =========================
+    // TRÌNH PHÁT NHẠC
+    // =========================
+
+    const songs = [
+      {
+        file: "sound1.mp3",
+        title: "Song Title One",
+        artist: "Artist Name"
+      },
+      {
+        file: "sound2.mp3",
+        title: "Song Title Two",
+        artist: "Artist Name"
+      },
+      {
+        file: "sound3.mp3",
+        title: "Song Title Three",
+        artist: "Artist Name"
+      }
+    ];
+
+    const audioPlayer = new Audio();
+    let currentSongIndex = -1;
+
+    const songButtons = document.querySelectorAll(".song-cover-button");
+
+    function updateSongUI() {
+      songButtons.forEach((button, index) => {
+        const isCurrent = index === currentSongIndex;
+        const isPlaying = isCurrent && !audioPlayer.paused;
+
+        const overlay = button.querySelector(".song-cover-overlay");
+        const shape = button.querySelector(".play-shape");
+        const status = document.querySelector(`[data-status="${index}"]`);
+
+        button.classList.toggle("is-playing", isPlaying);
+
+        if (isPlaying) {
+          // Biểu tượng tạm dừng
+          shape.setAttribute("d", "M6 5h4v14H6zm8 0h4v14h-4z");
+          status.textContent = "Đang phát";
+        } else {
+          // Biểu tượng phát
+          shape.setAttribute("d", "M8 5v14l11-7z");
+
+          if (isCurrent) {
+            status.textContent = "Đã tạm dừng";
+          } else {
+            status.textContent = "Chưa phát";
+          }
+        }
+      });
+    }
+
+    async function toggleSong(index) {
+      // Nếu bấm lại bài đang phát thì tạm dừng
+      if (currentSongIndex === index && !audioPlayer.paused) {
+        audioPlayer.pause();
+        updateSongUI();
+        return;
+      }
+
+      // Nếu bấm bài khác thì tải và phát bài mới
+      if (currentSongIndex !== index) {
+        currentSongIndex = index;
+        audioPlayer.src = songs[index].file;
+        audioPlayer.load();
+      }
+
+      try {
+        await audioPlayer.play();
+        updateSongUI();
+      } catch (error) {
+        console.error("Không thể phát bài nhạc:", error);
+        alert(
+          "Không phát được bài nhạc. Hãy kiểm tra tên file và đảm bảo file đã được tải lên GitHub."
+        );
+      }
+    }
+
+    // Bấm ảnh bìa để phát / tạm dừng
+    songButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const index = Number(button.dataset.song);
+        toggleSong(index);
+      });
+    });
+
+    // Cập nhật giao diện khi nhạc bị tạm dừng hoặc phát
+    audioPlayer.addEventListener("play", updateSongUI);
+    audioPlayer.addEventListener("pause", updateSongUI);
+
+    // Khi bài nhạc kết thúc
+    audioPlayer.addEventListener("ended", () => {
+      updateSongUI();
     });
   </script>
 
