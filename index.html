@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Phạm Xuân Sơn</title>
 
   <style>
@@ -58,7 +59,7 @@
     }
 
     /* =========================
-       NÚT ĐỔI SÁNG / TỐI
+       NÚT ĐỔI GIAO DIỆN
     ========================= */
 
     .theme-toggle {
@@ -69,17 +70,22 @@
 
       width: 48px;
       height: 48px;
+
       border: 1px solid rgba(255, 255, 255, 0.4);
       border-radius: 50%;
 
       background: rgba(255, 255, 255, 0.85);
       color: #111;
+
       font-size: 22px;
       cursor: pointer;
 
       backdrop-filter: blur(10px);
       box-shadow: var(--shadow);
-      transition: transform 0.3s ease, background 0.3s ease;
+
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease;
     }
 
     .theme-toggle:hover {
@@ -110,15 +116,19 @@
 
       border: 1px solid var(--panel-border);
       border-radius: 24px;
+
       background: var(--panel-bg);
 
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
 
       box-shadow: var(--shadow);
+
       animation: fadeIn 1s ease;
 
-      transition: background 0.4s ease, border 0.4s ease;
+      transition:
+        background 0.4s ease,
+        border 0.4s ease;
     }
 
     /* =========================
@@ -134,14 +144,17 @@
     .avatar {
       width: 150px;
       height: 150px;
-      object-fit: cover;
 
+      object-fit: cover;
       border-radius: 50%;
+
       border: 3px solid rgba(255, 255, 255, 0.8);
 
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 
-      transition: transform 0.3s ease, border-color 0.3s ease;
+      transition:
+        transform 0.3s ease,
+        border-color 0.3s ease;
     }
 
     .avatar:hover {
@@ -200,8 +213,8 @@
 
       border: 1px solid rgba(255, 255, 255, 0.35);
       border-radius: 50%;
-      background: var(--button-bg);
 
+      background: var(--button-bg);
       backdrop-filter: blur(8px);
 
       transition:
@@ -222,7 +235,7 @@
     }
 
     /* =========================
-       FAVORITE MUSIC BUTTON
+       NÚT FAVORITE MUSIC
     ========================= */
 
     .music-button {
@@ -238,8 +251,8 @@
 
       background: var(--button-bg);
       color: #fff;
-      cursor: pointer;
 
+      cursor: pointer;
       backdrop-filter: blur(8px);
 
       transition:
@@ -260,7 +273,7 @@
     }
 
     /* =========================
-       DANH SÁCH NHẠC
+       PLAYLIST
     ========================= */
 
     .music-panel {
@@ -274,7 +287,10 @@
       overflow: hidden;
 
       background: var(--panel-bg);
-      transition: background 0.4s ease, border 0.4s ease;
+
+      transition:
+        background 0.4s ease,
+        border 0.4s ease;
     }
 
     .music-panel.show {
@@ -284,9 +300,63 @@
 
     .music-heading {
       padding: 18px 20px;
+
       font-size: 16px;
       font-weight: 700;
+
       border-bottom: 1px solid var(--panel-border);
+    }
+
+    /* =========================
+       THANH CUỘN RIÊNG CHO LIST NHẠC
+    ========================= */
+
+    .music-list {
+      max-height: 300px;
+      overflow-y: auto;
+
+      overscroll-behavior: contain;
+
+      scrollbar-width: thin;
+      scrollbar-color:
+        rgba(255, 255, 255, 0.55)
+        rgba(0, 0, 0, 0.15);
+    }
+
+    /* Chrome, Edge, Safari */
+    .music-list::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .music-list::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+    }
+
+    .music-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.55);
+      border-radius: 10px;
+    }
+
+    .music-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Thanh cuộn trong giao diện tối */
+    body.dark-mode .music-list {
+      scrollbar-color: #666 #151515;
+    }
+
+    body.dark-mode .music-list::-webkit-scrollbar-track {
+      background: #151515;
+    }
+
+    body.dark-mode .music-list::-webkit-scrollbar-thumb {
+      background: #666;
+    }
+
+    body.dark-mode .music-list::-webkit-scrollbar-thumb:hover {
+      background: #888;
     }
 
     /* =========================
@@ -297,9 +367,11 @@
       display: flex;
       align-items: center;
       gap: 14px;
+
       padding: 15px 20px;
 
       border-bottom: 1px solid var(--panel-border);
+
       transition: background 0.2s ease;
     }
 
@@ -311,9 +383,13 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
-    /* Ảnh bìa bài nhạc */
+    /* =========================
+       ẢNH BÌA BÀI NHẠC
+    ========================= */
+
     .song-cover-button {
       position: relative;
+
       width: 58px;
       height: 58px;
       flex-shrink: 0;
@@ -330,13 +406,14 @@
     .song-cover {
       width: 100%;
       height: 100%;
+
       display: block;
       object-fit: cover;
 
       transition: transform 0.3s ease;
     }
 
-    /* Lớp phủ khi rê chuột */
+    /* Lớp phủ và biểu tượng phát */
     .song-cover-overlay {
       position: absolute;
       inset: 0;
@@ -360,7 +437,7 @@
       opacity: 1;
     }
 
-    /* Trên điện thoại: luôn hiển thị biểu tượng phát */
+    /* Trên điện thoại luôn hiện biểu tượng phát */
     @media (hover: none) {
       .song-cover-overlay {
         opacity: 1;
@@ -374,12 +451,16 @@
       fill: currentColor;
     }
 
+    /* Khi bài đang phát */
     .song-cover-button.is-playing .song-cover-overlay {
       opacity: 1;
       background: rgba(0, 0, 0, 0.55);
     }
 
-    /* Thông tin bài nhạc */
+    /* =========================
+       THÔNG TIN BÀI NHẠC
+    ========================= */
+
     .song-info {
       flex: 1;
       min-width: 0;
@@ -507,6 +588,7 @@
       .theme-toggle {
         top: 15px;
         right: 15px;
+
         width: 44px;
         height: 44px;
       }
@@ -640,86 +722,207 @@
 
       </div>
 
-      <!-- DANH SÁCH NHẠC -->
+      <!-- =========================
+           DANH SÁCH NHẠC
+      ========================= -->
+
       <div id="music-panel" class="music-panel">
 
         <div class="music-heading">My Playlist</div>
 
-        <!-- BÀI 1 -->
-        <div class="song">
-          <button
-            class="song-cover-button"
-            data-song="0"
-            aria-label="Phát hoặc tạm dừng bài 1"
-            title="Phát / Tạm dừng"
-          >
-            <img src="music1.jpg" alt="Ảnh bìa bài 1" class="song-cover">
+        <div class="music-list">
 
-            <span class="song-cover-overlay">
-              <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path class="play-shape" d="M8 5v14l11-7z"/>
-              </svg>
-            </span>
-          </button>
+          <!-- BÀI 1 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="0" aria-label="Phát hoặc tạm dừng bài 1" title="Phát / Tạm dừng">
+              <img src="music1.jpg" alt="Ảnh bìa bài 1" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
 
-          <div class="song-info">
-            <div class="song-title">Song Title One</div>
-            <div class="song-artist">Artist Name</div>
+            <div class="song-info">
+              <div class="song-title">Song Title One</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
+
+            <div class="song-status" data-status="0">Chưa phát</div>
           </div>
 
-          <div class="song-status" data-status="0">Chưa phát</div>
-        </div>
+          <!-- BÀI 2 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="1" aria-label="Phát hoặc tạm dừng bài 2" title="Phát / Tạm dừng">
+              <img src="music2.jpg" alt="Ảnh bìa bài 2" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
 
-        <!-- BÀI 2 -->
-        <div class="song">
-          <button
-            class="song-cover-button"
-            data-song="1"
-            aria-label="Phát hoặc tạm dừng bài 2"
-            title="Phát / Tạm dừng"
-          >
-            <img src="music2.jpg" alt="Ảnh bìa bài 2" class="song-cover">
+            <div class="song-info">
+              <div class="song-title">Song Title Two</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
 
-            <span class="song-cover-overlay">
-              <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path class="play-shape" d="M8 5v14l11-7z"/>
-              </svg>
-            </span>
-          </button>
-
-          <div class="song-info">
-            <div class="song-title">Song Title Two</div>
-            <div class="song-artist">Artist Name</div>
+            <div class="song-status" data-status="1">Chưa phát</div>
           </div>
 
-          <div class="song-status" data-status="1">Chưa phát</div>
-        </div>
+          <!-- BÀI 3 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="2" aria-label="Phát hoặc tạm dừng bài 3" title="Phát / Tạm dừng">
+              <img src="music3.jpg" alt="Ảnh bìa bài 3" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
 
-        <!-- BÀI 3 -->
-        <div class="song">
-          <button
-            class="song-cover-button"
-            data-song="2"
-            aria-label="Phát hoặc tạm dừng bài 3"
-            title="Phát / Tạm dừng"
-          >
-            <img src="music3.jpg" alt="Ảnh bìa bài 3" class="song-cover">
+            <div class="song-info">
+              <div class="song-title">Song Title Three</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
 
-            <span class="song-cover-overlay">
-              <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path class="play-shape" d="M8 5v14l11-7z"/>
-              </svg>
-            </span>
-          </button>
-
-          <div class="song-info">
-            <div class="song-title">Song Title Three</div>
-            <div class="song-artist">Artist Name</div>
+            <div class="song-status" data-status="2">Chưa phát</div>
           </div>
 
-          <div class="song-status" data-status="2">Chưa phát</div>
-        </div>
+          <!-- BÀI 4 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="3" aria-label="Phát hoặc tạm dừng bài 4" title="Phát / Tạm dừng">
+              <img src="music4.jpg" alt="Ảnh bìa bài 4" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
 
+            <div class="song-info">
+              <div class="song-title">Song Title Four</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
+
+            <div class="song-status" data-status="3">Chưa phát</div>
+          </div>
+
+          <!-- BÀI 5 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="4" aria-label="Phát hoặc tạm dừng bài 5" title="Phát / Tạm dừng">
+              <img src="music5.jpg" alt="Ảnh bìa bài 5" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="song-info">
+              <div class="song-title">Song Title Five</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
+
+            <div class="song-status" data-status="4">Chưa phát</div>
+          </div>
+
+          <!-- BÀI 6 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="5" aria-label="Phát hoặc tạm dừng bài 6" title="Phát / Tạm dừng">
+              <img src="music6.jpg" alt="Ảnh bìa bài 6" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="song-info">
+              <div class="song-title">Song Title Six</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
+
+            <div class="song-status" data-status="5">Chưa phát</div>
+          </div>
+
+          <!-- BÀI 7 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="6" aria-label="Phát hoặc tạm dừng bài 7" title="Phát / Tạm dừng">
+              <img src="music7.jpg" alt="Ảnh bìa bài 7" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="song-info">
+              <div class="song-title">Song Title Seven</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
+
+            <div class="song-status" data-status="6">Chưa phát</div>
+          </div>
+
+          <!-- BÀI 8 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="7" aria-label="Phát hoặc tạm dừng bài 8" title="Phát / Tạm dừng">
+              <img src="music8.jpg" alt="Ảnh bìa bài 8" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="song-info">
+              <div class="song-title">Song Title Eight</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
+
+            <div class="song-status" data-status="7">Chưa phát</div>
+          </div>
+
+          <!-- BÀI 9 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="8" aria-label="Phát hoặc tạm dừng bài 9" title="Phát / Tạm dừng">
+              <img src="music9.jpg" alt="Ảnh bìa bài 9" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="song-info">
+              <div class="song-title">Song Title Nine</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
+
+            <div class="song-status" data-status="8">Chưa phát</div>
+          </div>
+
+          <!-- BÀI 10 -->
+          <div class="song">
+            <button class="song-cover-button" data-song="9" aria-label="Phát hoặc tạm dừng bài 10" title="Phát / Tạm dừng">
+              <img src="music10.jpg" alt="Ảnh bìa bài 10" class="song-cover">
+              <span class="song-cover-overlay">
+                <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="play-shape" d="M8 5v14l11-7z"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="song-info">
+              <div class="song-title">Song Title Ten</div>
+              <div class="song-artist">Artist Name</div>
+            </div>
+
+            <div class="song-status" data-status="9">Chưa phát</div>
+          </div>
+
+        </div>
       </div>
 
       <div class="footer">
@@ -771,6 +974,7 @@
       setTheme(isDark);
     });
 
+    // Khôi phục giao diện đã chọn
     const savedTheme = localStorage.getItem("theme");
     setTheme(savedTheme === "dark");
 
@@ -790,7 +994,7 @@
 
 
     // =========================
-    // TRÌNH PHÁT NHẠC
+    // DANH SÁCH 10 BÀI NHẠC
     // =========================
 
     const songs = [
@@ -808,8 +1012,48 @@
         file: "sound3.mp3",
         title: "Song Title Three",
         artist: "Artist Name"
+      },
+      {
+        file: "sound4.mp3",
+        title: "Song Title Four",
+        artist: "Artist Name"
+      },
+      {
+        file: "sound5.mp3",
+        title: "Song Title Five",
+        artist: "Artist Name"
+      },
+      {
+        file: "sound6.mp3",
+        title: "Song Title Six",
+        artist: "Artist Name"
+      },
+      {
+        file: "sound7.mp3",
+        title: "Song Title Seven",
+        artist: "Artist Name"
+      },
+      {
+        file: "sound8.mp3",
+        title: "Song Title Eight",
+        artist: "Artist Name"
+      },
+      {
+        file: "sound9.mp3",
+        title: "Song Title Nine",
+        artist: "Artist Name"
+      },
+      {
+        file: "sound10.mp3",
+        title: "Song Title Ten",
+        artist: "Artist Name"
       }
     ];
+
+
+    // =========================
+    // TRÌNH PHÁT NHẠC
+    // =========================
 
     const audioPlayer = new Audio();
     let currentSongIndex = -1;
@@ -821,19 +1065,27 @@
         const isCurrent = index === currentSongIndex;
         const isPlaying = isCurrent && !audioPlayer.paused;
 
-        const overlay = button.querySelector(".song-cover-overlay");
         const shape = button.querySelector(".play-shape");
-        const status = document.querySelector(`[data-status="${index}"]`);
+        const status = document.querySelector(
+          `[data-status="${index}"]`
+        );
 
         button.classList.toggle("is-playing", isPlaying);
 
         if (isPlaying) {
           // Biểu tượng tạm dừng
-          shape.setAttribute("d", "M6 5h4v14H6zm8 0h4v14h-4z");
+          shape.setAttribute(
+            "d",
+            "M6 5h4v14H6zm8 0h4v14h-4z"
+          );
+
           status.textContent = "Đang phát";
         } else {
           // Biểu tượng phát
-          shape.setAttribute("d", "M8 5v14l11-7z");
+          shape.setAttribute(
+            "d",
+            "M8 5v14l11-7z"
+          );
 
           if (isCurrent) {
             status.textContent = "Đã tạm dừng";
@@ -845,16 +1097,20 @@
     }
 
     async function toggleSong(index) {
-      // Nếu bấm lại bài đang phát thì tạm dừng
-      if (currentSongIndex === index && !audioPlayer.paused) {
+      // Bấm lại bài đang phát -> tạm dừng
+      if (
+        currentSongIndex === index &&
+        !audioPlayer.paused
+      ) {
         audioPlayer.pause();
         updateSongUI();
         return;
       }
 
-      // Nếu bấm bài khác thì tải và phát bài mới
+      // Chọn bài khác -> tải bài mới
       if (currentSongIndex !== index) {
         currentSongIndex = index;
+
         audioPlayer.src = songs[index].file;
         audioPlayer.load();
       }
@@ -864,6 +1120,7 @@
         updateSongUI();
       } catch (error) {
         console.error("Không thể phát bài nhạc:", error);
+
         alert(
           "Không phát được bài nhạc. Hãy kiểm tra tên file và đảm bảo file đã được tải lên GitHub."
         );
@@ -878,14 +1135,12 @@
       });
     });
 
-    // Cập nhật giao diện khi nhạc bị tạm dừng hoặc phát
+    // Cập nhật giao diện khi nhạc phát hoặc tạm dừng
     audioPlayer.addEventListener("play", updateSongUI);
     audioPlayer.addEventListener("pause", updateSongUI);
 
     // Khi bài nhạc kết thúc
-    audioPlayer.addEventListener("ended", () => {
-      updateSongUI();
-    });
+    audioPlayer.addEventListener("ended", updateSongUI);
   </script>
 
 </body>
