@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Personal Website</title>
+  <title>Phạm Xuân Sơn</title>
 
   <style>
     /* =========================
@@ -121,18 +121,60 @@
       transition: background 0.4s ease, border 0.4s ease;
     }
 
-    .welcome {
-      font-size: clamp(30px, 5vw, 48px);
-      font-weight: 700;
-      margin-bottom: 14px;
-      letter-spacing: 1px;
+    /* =========================
+       ẢNH ĐẠI DIỆN
+    ========================= */
+
+    .avatar-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 22px;
     }
 
-    .subtitle {
-      font-size: 16px;
-      line-height: 1.7;
+    .avatar {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+
+      transition:
+        transform 0.3s ease,
+        border-color 0.3s ease;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+
+    /* =========================
+       TÊN VÀ NGÀY SINH
+    ========================= */
+
+    .profile-name {
+      font-size: clamp(27px, 5vw, 38px);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .profile-details {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      font-size: 15px;
       opacity: 0.9;
-      margin-bottom: 28px;
+      margin-bottom: 30px;
+    }
+
+    .zodiac {
+      font-size: 22px;
+      line-height: 1;
     }
 
     /* =========================
@@ -337,6 +379,10 @@
       background: #252525;
     }
 
+    body.dark-mode .avatar {
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
     body.dark-mode .song-cover {
       background: #252525;
     }
@@ -371,7 +417,16 @@
         border-radius: 20px;
       }
 
-      .subtitle {
+      .avatar {
+        width: 125px;
+        height: 125px;
+      }
+
+      .profile-name {
+        font-size: 27px;
+      }
+
+      .profile-details {
         font-size: 14px;
       }
 
@@ -438,14 +493,25 @@
   <main class="container">
     <section class="profile-card">
 
-      <h1 class="welcome">Welcome to My Website</h1>
+      <!-- ẢNH ĐẠI DIỆN -->
+      <div class="avatar-wrapper">
+        <img
+          src="avatar.jpg"
+          alt="Ảnh đại diện Phạm Xuân Sơn"
+          class="avatar"
+        >
+      </div>
 
-      <p class="subtitle">
-        Xin chào! Đây là không gian cá nhân của mình.<br>
-        Một chút về bản thân, sở thích và những điều mình yêu thích.
-      </p>
+      <!-- TÊN -->
+      <h1 class="profile-name">Phạm Xuân Sơn</h1>
 
-      <!-- ICON INSTAGRAM VÀ FACEBOOK -->
+      <!-- NGÀY SINH VÀ CUNG HOÀNG ĐẠO -->
+      <div class="profile-details">
+        <span>22/11</span>
+        <span class="zodiac" title="Nhân Mã">♐</span>
+      </div>
+
+      <!-- ICON INSTAGRAM, FACEBOOK VÀ MUSIC -->
       <div class="social-links">
 
         <!-- Instagram -->
@@ -486,7 +552,7 @@
           title="Favorite Music"
         >
           <svg class="music-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 18V5l12-2v13h-2V5.4l-8 1.3V18a3 3 0 1 1-2-2.83V8.1l-4 0.67v11.23a3 3 0 1 1-2-2.83V7.1L9 6.1V18a3 3 0 1 1-2-2.83V8.1l-4 .67v11.23a3 3 0 1 1-2-2.83V7.1L9 6.1V18z"/>
+            <path d="M9 18V5l12-2v13h-2V5.4l-8 1.3V18a3 3 0 1 1-2-2.83V8.1l-4 0.67v11.23a3 3 0 1 1-2-2.83V7.1L9 6.1V18z"/>
           </svg>
         </button>
 
@@ -556,8 +622,8 @@
           : "Chuyển sang giao diện tối"
       );
 
-      // Sáng dùng background.mp4
-      // Tối dùng background-dark.mp4
+      // Sáng: background.mp4
+      // Tối: background-dark.mp4
       const videoPath = isDark
         ? "background-dark.mp4"
         : "background.mp4";
@@ -571,17 +637,16 @@
         });
       }
 
-      // Ghi nhớ lựa chọn
       localStorage.setItem("theme", isDark ? "dark" : "light");
     }
 
-    // Bấm nút đổi giao diện
+    // Bấm nút để đổi giao diện
     themeToggle.addEventListener("click", () => {
       const isDark = !document.body.classList.contains("dark-mode");
       setTheme(isDark);
     });
 
-    // Mặc định là giao diện sáng
+    // Mặc định sáng nếu chưa từng chọn giao diện
     const savedTheme = localStorage.getItem("theme");
     setTheme(savedTheme === "dark");
 
