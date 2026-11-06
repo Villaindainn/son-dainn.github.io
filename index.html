@@ -1173,5 +1173,387 @@
     audioPlayer.addEventListener("ended", updateSongUI);
   </script>
 
+
+  <!-- =========================
+       LITTLE BUDDY: CHISA PIXEL
+       Đặt các file trong assets/chisa/
+  ========================= -->
+  <div id="chisa-buddy" aria-label="Chisa pixel buddy" title="Kéo Chisa đi dạo hoặc nhấn để tương tác">
+    <div id="chisa-bubble" role="status" aria-live="polite"></div>
+    <img id="chisa-sprite" src="assets/chisa/chisa-idle.png" alt="Chisa pixel chibi">
+    <button id="chisa-hide" type="button" aria-label="Ẩn Chisa" title="Ẩn Chisa">×</button>
+  </div>
+  <button id="chisa-show" type="button" aria-label="Hiện Chisa" title="Hiện Chisa">🐾 Chisa</button>
+
+  <style>
+    /* Little Buddy - độc lập với giao diện website */
+    #chisa-buddy {
+      position: fixed;
+      left: 12px;
+      bottom: 8px;
+      width: 112px;
+      height: 132px;
+      z-index: 9999;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      filter: drop-shadow(0 4px 5px rgba(0,0,0,.25));
+    }
+    #chisa-buddy.dragging { cursor: grabbing; }
+    #chisa-sprite {
+      display: block;
+      width: 112px;
+      height: 112px;
+      object-fit: contain;
+      image-rendering: pixelated;
+      pointer-events: none;
+      transform-origin: center bottom;
+    }
+    #chisa-buddy.chisa-bounce #chisa-sprite {
+      animation: chisaBounce .38s ease;
+    }
+    #chisa-buddy.chisa-shake #chisa-sprite {
+      animation: chisaShake .45s ease;
+    }
+    #chisa-buddy.chisa-fall #chisa-sprite {
+      transform: rotate(0deg);
+    }
+    #chisa-bubble {
+      position: absolute;
+      left: 50%;
+      bottom: 112px;
+      transform: translateX(-50%);
+      max-width: 190px;
+      width: max-content;
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,.75);
+      border-radius: 13px;
+      background: rgba(255,248,244,.96);
+      color: #30232a;
+      font: 12px/1.35 Arial, sans-serif;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    #chisa-bubble::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -7px;
+      width: 12px;
+      height: 12px;
+      background: rgba(255,248,244,.96);
+      border-right: 1px solid rgba(255,255,255,.75);
+      border-bottom: 1px solid rgba(255,255,255,.75);
+      transform: translateX(-50%) rotate(45deg);
+    }
+    #chisa-bubble.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-5px);
+    }
+    #chisa-hide {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 23px;
+      height: 23px;
+      border: 1px solid rgba(255,255,255,.6);
+      border-radius: 50%;
+      background: rgba(20,20,25,.72);
+      color: white;
+      font: 16px/1 Arial, sans-serif;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+    #chisa-buddy:hover #chisa-hide { opacity: 1; }
+    #chisa-show {
+      display: none;
+      position: fixed;
+      left: 12px;
+      bottom: 12px;
+      z-index: 9998;
+      border: 1px solid rgba(255,255,255,.4);
+      border-radius: 22px;
+      padding: 9px 13px;
+      color: white;
+      background: rgba(30,25,38,.82);
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+      font: 13px Arial, sans-serif;
+    }
+    #chisa-show.visible { display: block; }
+    @keyframes chisaBounce {
+      0%,100% { translate: 0 0; }
+      40% { translate: 0 -13px; }
+      70% { translate: 0 -4px; }
+    }
+    @keyframes chisaShake {
+      0%,100% { rotate: 0deg; }
+      20%,60% { rotate: -12deg; }
+      40%,80% { rotate: 12deg; }
+    }
+    @media (max-width: 600px) {
+      #chisa-buddy { width: 88px; height: 108px; }
+      #chisa-sprite { width: 88px; height: 88px; }
+      #chisa-bubble { bottom: 90px; font-size: 11px; }
+      #chisa-hide { opacity: .8; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #chisa-buddy, #chisa-sprite, #chisa-bubble { transition: none !important; }
+      #chisa-buddy.chisa-bounce #chisa-sprite,
+      #chisa-buddy.chisa-shake #chisa-sprite { animation: none !important; }
+    }
+  </style>
+
+  <script>
+  (() => {
+    const buddy = document.getElementById("chisa-buddy");
+    const sprite = document.getElementById("chisa-sprite");
+    const bubble = document.getElementById("chisa-bubble");
+    const hideButton = document.getElementById("chisa-hide");
+    const showButton = document.getElementById("chisa-show");
+
+    if (!buddy || !sprite || !bubble) return;
+
+    const assets = {
+      idle: "assets/chisa/chisa-idle.png",
+      run: "assets/chisa/chisa-run.gif",
+      fall: "assets/chisa/chisa-fall.gif",
+      sleep: "assets/chisa/chisa-sleep.gif"
+    };
+    const lines = [
+      "Đi dạo một chút thôi~",
+      "Cậu đang làm gì thế?",
+      "Đừng nhìn tớ mãi chứ...",
+      "Hôm nay thời tiết dễ chịu nhỉ!",
+      "Cho tớ nghỉ một lát nhé.",
+      "Ủa? Gọi tớ à?",
+      "Tớ vẫn đang ở đây nè!",
+      "Hừm... có gì vui không?",
+      "Đừng có chọc tớ nhé!",
+      "Đi đâu giờ nhỉ? ♡"
+    ];
+
+    let x = 12;
+    let direction = 1;
+    let mode = "idle";
+    let moving = false;
+    let dragging = false;
+    let pointerStart = null;
+    let dragMoved = false;
+    let lastInteraction = Date.now();
+    let nextMoveAt = Date.now() + 1800;
+    let moveUntil = 0;
+    let speechTimer = null;
+    let loopTimer = null;
+    let hidden = false;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function setBubble(message, duration = 2600) {
+      bubble.textContent = message;
+      bubble.classList.add("show");
+      clearTimeout(speechTimer);
+      speechTimer = setTimeout(() => bubble.classList.remove("show"), duration);
+    }
+
+    function setMode(next) {
+      if (mode === next) return;
+      mode = next;
+      buddy.classList.remove("chisa-bounce", "chisa-shake", "chisa-fall");
+      if (next === "run") {
+        sprite.src = assets.run;
+      } else if (next === "fall") {
+        buddy.classList.add("chisa-fall");
+        sprite.src = assets.fall;
+      } else if (next === "sleep") {
+        sprite.src = assets.sleep;
+      } else {
+        sprite.src = assets.idle;
+      }
+    }
+
+    function place() {
+      const maxX = Math.max(0, window.innerWidth - buddy.offsetWidth);
+      x = Math.max(0, Math.min(maxX, x));
+      buddy.style.left = `${x}px`;
+      buddy.style.right = "auto";
+      sprite.style.transform = direction < 0 ? "scaleX(-1)" : "scaleX(1)";
+    }
+
+    function randomLine() {
+      setBubble(lines[Math.floor(Math.random() * lines.length)]);
+    }
+
+    function walk() {
+      if (hidden || dragging || reducedMotion) return;
+      const now = Date.now();
+
+      if (mode === "fall") {
+        if (now >= moveUntil) {
+          setMode("idle");
+          nextMoveAt = now + 2200;
+        }
+        return;
+      }
+
+      if (now - lastInteraction > 22000) {
+        if (mode !== "sleep") {
+          setMode("sleep");
+          setBubble("Zzz... cho tớ ngủ một chút nhé.");
+        }
+        return;
+      }
+
+      if (mode === "sleep") {
+        if (now - lastInteraction < 22000) setMode("idle");
+        return;
+      }
+
+      if (moving) {
+        x += direction * 1.15;
+        const maxX = Math.max(0, window.innerWidth - buddy.offsetWidth);
+        if (x <= 0 || x >= maxX) {
+          direction *= -1;
+          x = Math.max(0, Math.min(maxX, x));
+          if (Math.random() < 0.35) randomLine();
+        }
+        if (now >= moveUntil) {
+          moving = false;
+          setMode("idle");
+          nextMoveAt = now + 1800 + Math.random() * 3500;
+          if (Math.random() < 0.3) randomLine();
+        }
+        place();
+      } else if (now >= nextMoveAt) {
+        moving = true;
+        direction = Math.random() < 0.5 ? -1 : 1;
+        setMode("run");
+        moveUntil = now + 2600 + Math.random() * 3600;
+        place();
+      }
+    }
+
+    function interact() {
+      lastInteraction = Date.now();
+      if (mode === "run" || moving) {
+        moving = false;
+        setMode("fall");
+        setBubble("Á! Đau quá... cậu làm tớ vấp rồi! ;_;", 3000);
+        moveUntil = Date.now() + 1500;
+        return;
+      }
+      if (mode === "fall") return;
+
+      setMode("idle");
+      const reactions = [
+        "Ơi? Cậu gọi tớ à? ♡",
+        "Đừng chọc tớ nữa...",
+        "Hihi, nhột đó!",
+        "Có chuyện gì thế?",
+        "Tớ đang ngắm cảnh mà!",
+        "Vuốt đầu tớ đi nào~"
+      ];
+      setBubble(reactions[Math.floor(Math.random() * reactions.length)]);
+      buddy.classList.remove("chisa-bounce");
+      void buddy.offsetWidth;
+      buddy.classList.add("chisa-bounce");
+      if (Math.random() < 0.35) {
+        setTimeout(() => {
+          buddy.classList.remove("chisa-bounce");
+          buddy.classList.add("chisa-shake");
+          setTimeout(() => buddy.classList.remove("chisa-shake"), 480);
+        }, 650);
+      }
+    }
+
+    buddy.addEventListener("pointerdown", (event) => {
+      if (event.target === hideButton) return;
+      pointerStart = { x: event.clientX, y: event.clientY, left: x };
+      dragMoved = false;
+      dragging = true;
+      moving = false;
+      buddy.classList.add("dragging");
+      buddy.setPointerCapture(event.pointerId);
+    });
+
+    buddy.addEventListener("pointermove", (event) => {
+      if (!dragging || !pointerStart) return;
+      const dx = event.clientX - pointerStart.x;
+      const dy = event.clientY - pointerStart.y;
+      if (Math.abs(dx) + Math.abs(dy) > 7) dragMoved = true;
+      if (dragMoved) {
+        lastInteraction = Date.now();
+        setMode("idle");
+        x = pointerStart.left + dx;
+        buddy.style.bottom = `${Math.max(4, Math.min(window.innerHeight - 100, window.innerHeight - event.clientY - 55))}px`;
+        if (dx !== 0) direction = dx < 0 ? -1 : 1;
+        place();
+      }
+    });
+
+    buddy.addEventListener("pointerup", () => {
+      if (!dragging) return;
+      dragging = false;
+      buddy.classList.remove("dragging");
+      if (dragMoved) {
+        lastInteraction = Date.now();
+        setBubble("Đặt tớ ở đây nhé! ♡");
+        nextMoveAt = Date.now() + 3500;
+      } else {
+        interact();
+      }
+      pointerStart = null;
+    });
+
+    buddy.addEventListener("pointercancel", () => {
+      dragging = false;
+      pointerStart = null;
+      buddy.classList.remove("dragging");
+    });
+
+    buddy.addEventListener("dblclick", (event) => {
+      event.preventDefault();
+      lastInteraction = Date.now();
+      setBubble("Hehe, cảm ơn cậu! ♡");
+      buddy.classList.remove("chisa-bounce");
+      void buddy.offsetWidth;
+      buddy.classList.add("chisa-bounce");
+    });
+
+    hideButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      hidden = true;
+      buddy.style.display = "none";
+      showButton.classList.add("visible");
+    });
+
+    showButton.addEventListener("click", () => {
+      hidden = false;
+      buddy.style.display = "flex";
+      showButton.classList.remove("visible");
+      lastInteraction = Date.now();
+      setMode("idle");
+      setBubble("Tớ quay lại rồi đây!");
+    });
+
+    window.addEventListener("resize", place);
+    place();
+    setTimeout(() => setBubble("Xin chào! Tớ là Chisa~", 3000), 1200);
+    loopTimer = setInterval(walk, 35);
+
+    // Thỉnh thoảng Chisa tự nói khi đang rảnh.
+    setInterval(() => {
+      if (!hidden && !dragging && mode === "idle" && Math.random() < 0.45) randomLine();
+    }, 12000);
+  })();
+  </script>
+
 </body>
 </html>
